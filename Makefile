@@ -1,3 +1,7 @@
+.PHONY: build
+build:
+	go build -o iprfc ./cmd/iprfc
+	
 # cleanup dependencies and download missing ones
 .PHONY: deps
 deps:

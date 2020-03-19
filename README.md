@@ -1,3 +1,3 @@
-# repo-template
+# iprfc
 
-GitHub repository template for Golang projects using codecov and travis CI. Includes a `Makefile` for common development workflow tasks, such as dependency updates, linting, formatting, etc..
+`iprfc` is a tool to download all RFCs in PDF form, store them on IPFS, and index them using the Lens search engine.
