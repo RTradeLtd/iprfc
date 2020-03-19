@@ -62,7 +62,6 @@ func DownloadAndSave(max int) {
 		case errMoreRFCs:
 			count++
 			goto START
-			log.Println("finished downloading rfc")
 		default:
 			log.Fatalf("error downloading rfc: %s", err)
 		}
