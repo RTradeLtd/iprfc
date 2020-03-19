@@ -8,10 +8,10 @@ import (
 
 func TestIPRFC(t *testing.T) {
 	t.Cleanup(func() {
-		os.Remove("downloads/rfc1.pdf")
+		os.Remove("rfc1.pdf")
 	})
 	DownloadAndSave(1)
-	data, err := ioutil.ReadFile("downloads/rfc1.pdf")
+	data, err := ioutil.ReadFile("rfc1.pdf")
 	if err != nil {
 		t.Fatal(err)
 	}

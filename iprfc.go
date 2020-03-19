@@ -41,7 +41,7 @@ func GetAndSave(rfc string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile("downloads/"+rfc+".pdf", body, os.FileMode(0640))
+	return ioutil.WriteFile(rfc+".pdf", body, os.FileMode(0640))
 }
 
 // DownloadAndSave is used to download and save a file
