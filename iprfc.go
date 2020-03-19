@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
+
+	ipfsapi "github.com/RTradeLtd/go-ipfs-api"
 )
 
 var (
@@ -66,4 +69,27 @@ func DownloadAndSave(max int) {
 			log.Fatalf("error downloading rfc: %s", err)
 		}
 	}
+}
+
+// StoreAndIndex is used to store a file on IPFS and index it
+func StoreAndIndex(sh *ipfsapi.Shell) error {
+	files, err := ioutil.ReadDir(".")
+	if err != nil {
+		return err
+	}
+	for _, file := range files {
+		if strings.HasSuffix(file.Name(), ".pdf") {
+			fh, err := os.Open(file.Name())
+			if err != nil {
+				return err
+			}
+			hash, err := sh.Add(fh)
+			if err != nil {
+				return err
+			}
+			fmt.Println(hash)
+			// TODO(bonedaddy): index
+		}
+	}
+	return nil
 }
