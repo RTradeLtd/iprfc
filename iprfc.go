@@ -1,6 +1,7 @@
 package iprfc
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -9,7 +10,10 @@ import (
 	"os"
 	"strings"
 
+	pbr "github.com/RTradeLtd/grpc/lens/request"
+
 	ipfsapi "github.com/RTradeLtd/go-ipfs-api"
+	"github.com/RTradeLtd/iprfc/lens"
 )
 
 var (
@@ -72,7 +76,9 @@ func DownloadAndSave(max int) {
 }
 
 // StoreAndIndex is used to store a file on IPFS and index it
-func StoreAndIndex(sh *ipfsapi.Shell) error {
+//
+// It reads all files in the current directory, adds it to IPFS, and then indexing it against Lens
+func StoreAndIndex(ctx context.Context, sh *ipfsapi.Shell, lc *lens.Client, index bool) error {
 	files, err := ioutil.ReadDir(".")
 	if err != nil {
 		return err
@@ -87,9 +93,22 @@ func StoreAndIndex(sh *ipfsapi.Shell) error {
 			if err != nil {
 				return err
 			}
-			fmt.Println(hash)
-			// TODO(bonedaddy): index
+			fmt.Printf("added\t%s\t%s\n", hash, file.Name())
+			if index {
+				if err := Index(ctx, lc, hash); err != nil {
+					return err
+				}
+			}
 		}
 	}
 	return nil
+}
+
+// Index is used to index a hash against lens
+func Index(ctx context.Context, lc *lens.Client, hash string) error {
+	_, err := lc.Index(ctx, &pbr.Index{
+		Type:       "ipld",
+		Identifier: hash,
+	})
+	return err
 }
